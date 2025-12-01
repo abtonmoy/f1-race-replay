@@ -36,6 +36,9 @@ def get_driver_colors(session):
         rgb_colors[driver] = rgb
     return rgb_colors
 
+def get_circuit_rotation(session):
+    circuit = session.get_circuit_info()
+    return circuit.rotation
 
 def get_race_telemetry(session, session_type='R'):
 
@@ -66,8 +69,6 @@ def get_race_telemetry(session, session_type='R'):
 
     global_t_min = None
     global_t_max = None
-    
-
     # 1. Get all of the drivers telemetry data
     for driver_no in drivers:
         code = driver_codes[driver_no]
@@ -110,14 +111,8 @@ def get_race_telemetry(session, session_type='R'):
             gear_lap = lap_tel["nGear"].to_numpy()
             drs_lap = lap_tel["DRS"].to_numpy()
 
-            # normalise lap distance to start at 0
-            d_lap = d_lap - d_lap.min()
-            lap_length = d_lap.max()  # approx. circuit length for this lap
-
             # race distance = distance before this lap + distance within this lap
             race_d_lap = total_dist_so_far + d_lap
-
-            total_dist_so_far += lap_length
 
             t_all.append(t_lap)
             x_all.append(x_lap)
@@ -280,6 +275,8 @@ def get_race_telemetry(session, session_type='R'):
         leader = snapshot[0]
         leader_lap = leader["lap"]
 
+        # TODO: This 5c. step seems futile currently as we are not using gaps anywhere, and it doesn't even comput the gaps. I think I left this in when removing the "gaps" feature that was half-finished during the initial development.
+
         # 5c. Compute gap to car in front in SECONDS
         frame_data = {}
 
@@ -293,7 +290,7 @@ def get_race_telemetry(session, session_type='R'):
                 "y": car["y"],
                 "dist": car["dist"],    
                 "lap": car["lap"],
-                "rel_dist": round(car["rel_dist"], 6),
+                "rel_dist": round(car["rel_dist"], 4),
                 "tyre": car["tyre"],
                 "position": position,
                 "speed": car['speed'],

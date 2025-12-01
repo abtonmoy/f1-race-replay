@@ -1,4 +1,4 @@
-from src.f1_data import get_race_telemetry, get_driver_colors, load_race_session, enable_cache
+from src.f1_data import get_race_telemetry, load_race_session, enable_cache, get_circuit_rotation
 from src.arcade_replay import run_arcade_replay
 import sys
 
@@ -20,6 +20,12 @@ def main(year=None, round_number=None, playback_speed=1, session_type='R'):
 
   drivers = session.drivers
 
+  # Get circuit rotation
+
+  circuit_rotation = get_circuit_rotation(session)
+
+  # Run the arcade replay
+
   run_arcade_replay(
     frames=race_telemetry['frames'],
     track_statuses=race_telemetry['track_statuses'],
@@ -27,7 +33,8 @@ def main(year=None, round_number=None, playback_speed=1, session_type='R'):
     drivers=drivers,
     playback_speed=1.0,
     driver_colors=race_telemetry['driver_colors'],
-    title=f"{session.event['EventName']} - {'Sprint' if session_type == 'S' else 'Race'}"
+    title=f"{session.event['EventName']} - {'Sprint' if session_type == 'S' else 'Race'}",
+    circuit_rotation=circuit_rotation,
   )
 
 if __name__ == "__main__":
