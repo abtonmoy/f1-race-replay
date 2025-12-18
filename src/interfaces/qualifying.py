@@ -660,6 +660,7 @@ class QualifyingReplay(arcade.Window):
                 ("Rewind / FastForward", ("[", "/", "]"),("arrow-left", "arrow-right")), # text, brackets, icons
                 ("Speed +/- (0.5x, 1x, 2x, 4x)", ("[", "/", "]"), ("arrow-up", "arrow-down")), # text, brackets, icons
                 ("[R]       Restart"),
+                ("[D]       Toggle DRS zones on track map"),
                 ("[C]       Toggle comparison driver telemetry")
             ]
             for i, lines in enumerate(legend_lines):
