@@ -1355,11 +1355,25 @@ def plotDRSzones(example_lap):
    
    return drs_zones
 
-def draw_finish_line(self):
-    if(len(self.screen_inner_points) > 0 and len(self.screen_outer_points) > 0):
+def draw_finish_line(self, session_type = 'R'):
+    if(session_type not in ['R', 'Q']):
+        print("Invalid session type for finish line drawing...")
+        return
+
+    start_inner = None
+    start_outer = None
+
+    if(session_type == 'Q' and len(self.inner_pts) > 0 and len(self.outer_pts) > 0):
+        start_inner = self.inner_pts[0]
+        start_outer = self.outer_pts[0]
+    elif(session_type == 'R' and len(self.screen_inner_points) > 0 and len(self.screen_outer_points) > 0):
         start_inner = self.screen_inner_points[0]
         start_outer = self.screen_outer_points[0]
-
+    else:
+        return
+    
+    # Draw checkered finish line
+    if start_inner and start_outer:
         num_squares = 20
         extension = 20
             
